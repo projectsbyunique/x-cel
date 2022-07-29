@@ -59,6 +59,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "car30"
     },
+    "image13": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgBgAAAAAAABmBAAAAAAAAGYEAAAAAAABgBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "explosion1"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

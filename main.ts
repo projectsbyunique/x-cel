@@ -40,6 +40,10 @@ function makeHallways () {
     }
     tiles.replaceAllTiles(assets.tile`myTile2`, assets.tile`transparency16`)
 }
+scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
+    music.bigCrash.play()
+})
+let projectile: Sprite = null
 let hallway: Sprite = null
 let float = 7
 let mySprite = Render.getRenderSpriteVariable()
@@ -84,4 +88,14 @@ game.onUpdate(function () {
     Render.setZOffset(mySprite, float)
     mySprite.vy = -50
     info.setScore(float)
+})
+forever(function () {
+    if (controller.A.isPressed()) {
+        timer.throttle("action", 200, function () {
+            music.pewPew.play()
+            projectile = sprites.createProjectileFromSprite(assets.image`explosion1`, Render.getRenderSpriteInstance(), Render.getAttribute(Render.attribute.dirX) * 80, Render.getAttribute(Render.attribute.dirY) * 60)
+            Render.setZOffset(projectile, float)
+            projectile.y += -50
+        })
+    }
 })
