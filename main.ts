@@ -1,0 +1,6 @@
+let mySprite = Render.getRenderSpriteVariable()
+tiles.setCurrentTilemap(tilemap`level`)
+Render.setAttribute(Render.attribute.wallZScale, 2)
+Render.setViewAngleInDegree(-90)
+tiles.placeOnTile(mySprite, tiles.getTileLocation(8, 49))
+Render.moveWithController(6, 1, 0)
