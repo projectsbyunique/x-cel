@@ -54,6 +54,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "myImage8"
     },
+    "image12": {
+        "data": "hwQQABAAAAAAAADu7u7uAAAA4CIiPu4OAAAuIuIz7g4AAC4i4uPuDwDumZnp7v674J6Zmevu/rzgQkTivuL+/C4iROS74u4PLiJC5Lvi7g4uIiLku+LuDi4iIuTu7u4PLiIi5Lvi/rvgQkTivuL+vAC+mZnr7v78AOCbmbnu7g8AAO7u7u7uAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "car30"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

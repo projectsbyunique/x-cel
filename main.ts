@@ -2,24 +2,28 @@ namespace SpriteKind {
     export const Jet = SpriteKind.create()
     export const Scenery = SpriteKind.create()
 }
-scene.onHitWall(SpriteKind.Player, function (sprite, location) {
-    game.over(false)
-})
 function makeFakeBuilding () {
     for (let value of tiles.getTilesByType(assets.tile`myTile5`)) {
         hallway = sprites.create(assets.image`myImage7`, SpriteKind.Scenery)
         tiles.placeOnTile(hallway, tiles.getTileLocation(value.column, value.row))
         hallway.y += 8
-        Render.setZOffset(hallway, 0)
+        Render.setZOffset(hallway, -1)
     }
     tiles.replaceAllTiles(assets.tile`myTile5`, assets.tile`transparency16`)
     for (let value of tiles.getTilesByType(assets.tile`myTile6`)) {
         hallway = sprites.create(assets.image`myImage8`, SpriteKind.Scenery)
         tiles.placeOnTile(hallway, tiles.getTileLocation(value.column, value.row))
         hallway.y += 8
-        Render.setZOffset(hallway, 0)
+        Render.setZOffset(hallway, -1)
     }
     tiles.replaceAllTiles(assets.tile`myTile6`, assets.tile`transparency16`)
+    for (let value of tiles.getTilesByType(assets.tile`myTile7`)) {
+        hallway = sprites.create(assets.image`car30`, SpriteKind.Scenery)
+        tiles.placeOnTile(hallway, tiles.getTileLocation(value.column, value.row))
+        scaling.scaleToPercent(hallway, 50, ScaleDirection.Uniformly, ScaleAnchor.Bottom)
+        Render.setZOffset(hallway, -1)
+    }
+    tiles.replaceAllTiles(assets.tile`myTile7`, assets.tile`transparency16`)
 }
 function makeHallways () {
     for (let value of tiles.getTilesByType(assets.tile`myTile2`)) {
@@ -49,7 +53,6 @@ let textSprite = textsprite.create("aSasa")
 textSprite.setPosition(80, 60)
 jet.setFlag(SpriteFlag.RelativeToCamera, true)
 Render.moveWithController(0, 0)
-mySprite.setVelocity(0, -50)
 makeHallways()
 makeFakeBuilding()
 game.onUpdate(function () {
@@ -79,5 +82,6 @@ game.onUpdate(function () {
         }
     }
     Render.setZOffset(mySprite, float)
+    mySprite.vy = -50
     info.setScore(float)
 })
