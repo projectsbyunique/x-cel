@@ -3,8 +3,9 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "pxt-raycasting": "github:aqeeaqee/pxt-raycasting#v0.3.14",
-        "sprite-scaling": "*"
+        "sprite-scaling": "*",
+        "pxt-raycasting": "github:aqeeaqee/pxt-raycasting#master",
+        "arcade-text": "github:microsoft/arcade-text#v1.3.0"
     },
     "files": [
         "main.blocks",
@@ -12,7 +13,9 @@
         "README.md",
         "assets.json",
         "tilemap.g.jres",
-        "tilemap.g.ts"
+        "tilemap.g.ts",
+        "images.g.jres",
+        "images.g.ts"
     ],
     "testFiles": [
         "test.ts"
