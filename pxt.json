@@ -1,5 +1,5 @@
 {
-    "name": "X-CEL",
+    "name": "X-CEL - Copy",
     "version": "0.0.1",
     "description": "",
     "dependencies": {
@@ -11,7 +11,8 @@
         "tilemaps": "github:microsoft/pxt-tilemaps#v1.12.0",
         "arcade-background-scroll": "github:microsoft/arcade-background-scroll#6cfbf925b9a4d5ddf3e1078e6cf6ca6a1aebb301",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
-        "Color Fading": "github:jwunderl/pxt-color#v0.2.2"
+        "Color Fading": "github:jwunderl/pxt-color#v0.2.2",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
     },
     "files": [
         "main.blocks",

@@ -64,6 +64,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "explosion1"
     },
+    "image14": {
+        "data": "hwQQABcAAAAAAAAAAAAAAAAAAAwAAAAAAMAMAAAAAAwAAAAAAMzMAAAAwAsAAAAAAMzMAAAAwAsAAAAAwLzPDAAAvAsAAAAAwPu/zMzMvAsAAAAAsPzPy8zMuwsAAAAAwPu/vP+/vwsAAAAAsPu/u7+/vw8AAAAAsPu/u/+//wsAAAAAsPu/293duwsAAAAA0Pu7DQAAvQsAAAAAALu7AAAAwAsAAAAAAL3bAAAA0AsAAAAAANANAAAAAAwAAAAAAAAAAAAAAA0=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "myImage9"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
