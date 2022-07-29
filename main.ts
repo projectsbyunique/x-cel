@@ -34,7 +34,10 @@ function makeFakeBuilding () {
     tiles.replaceAllTiles(assets.tile`myTile13`, assets.tile`transparency16`)
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
-    statusbar.value += -5
+    if (Render.isSpritesOverlapZ(sprite, otherSprite)) {
+        statusbar.value += -5
+        sprite.destroy()
+    }
     sprite.destroy()
 })
 function makeHallways () {
@@ -66,7 +69,7 @@ let hallway: Sprite = null
 let statusbar: StatusBarSprite = null
 let float = 7
 let mySprite = Render.getRenderSpriteVariable()
-scaling.scaleToPercent(mySprite, 1, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+scaling.scaleToPercent(Render.getRenderSpriteInstance(), 1, ScaleDirection.Uniformly, ScaleAnchor.Middle)
 tiles.setCurrentTilemap(tilemap`level`)
 scene.setBackgroundImage(assets.image`cityscape`)
 Render.setAttribute(Render.attribute.wallZScale, 2)
@@ -106,14 +109,14 @@ game.onUpdate(function () {
         }
     }
     Render.setZOffset(mySprite, float)
-    mySprite.vy = -50
+    Render.getRenderSpriteInstance().vy = -50
     info.setScore(float)
 })
 forever(function () {
     if (controller.A.isPressed()) {
         timer.throttle("action", 200, function () {
             music.pewPew.play()
-            projectile = sprites.createProjectileFromSprite(assets.image`explosion1`, Render.getRenderSpriteInstance(), Render.getAttribute(Render.attribute.dirX) * 80, Render.getAttribute(Render.attribute.dirY) * 55)
+            projectile = sprites.createProjectileFromSprite(assets.image`explosion1`, mySprite, Render.getAttribute(Render.attribute.dirX) * 80, Render.getAttribute(Render.attribute.dirY) * 55)
             projectile.y += -50
         })
     }
@@ -125,26 +128,16 @@ forever(function () {
     if (!(sprites.allOfKind(SpriteKind.e_bullet_spawn).length == 0)) {
         for (let value of sprites.allOfKind(SpriteKind.e_bullet_spawn)) {
             mySprite2 = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
+                . . 2 2 . . 
+                . 3 1 1 3 . 
+                2 1 1 1 1 2 
+                2 1 1 1 1 2 
+                . 3 1 1 3 . 
+                . . 2 2 . . 
                 `, SpriteKind.Projectile)
             Render.setZOffset(mySprite2, 10)
             mySprite2.setPosition(value.x, value.y)
-            mySprite2.follow(mySprite, 100)
+            mySprite2.follow(Render.getRenderSpriteInstance(), 125)
             pause(100)
         }
     }
