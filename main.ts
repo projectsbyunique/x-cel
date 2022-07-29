@@ -93,7 +93,7 @@ forever(function () {
     if (controller.A.isPressed()) {
         timer.throttle("action", 200, function () {
             music.pewPew.play()
-            projectile = sprites.createProjectileFromSprite(assets.image`explosion1`, Render.getRenderSpriteInstance(), Render.getAttribute(Render.attribute.dirX) * 80, Render.getAttribute(Render.attribute.dirY) * 60)
+            projectile = sprites.createProjectileFromSprite(assets.image`explosion1`, Render.getRenderSpriteInstance(), Render.getAttribute(Render.attribute.dirX) * 80, Render.getAttribute(Render.attribute.dirY) * 55)
             Render.setZOffset(projectile, float)
             projectile.y += -50
         })
