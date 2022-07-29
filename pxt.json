@@ -4,8 +4,10 @@
     "dependencies": {
         "device": "*",
         "sprite-scaling": "*",
-        "pxt-raycasting": "github:aqeeaqee/pxt-raycasting#master",
-        "arcade-text": "github:microsoft/arcade-text#v1.3.0"
+        "pxt-raycasting": "pkg:pxt-raycasting.json",
+        "arcade-text": "github:microsoft/arcade-text#v1.3.0",
+        "pxt-arcade-image-transform": "github:robo-technical-group/pxt-arcade-image-transform#v1.0.8",
+        "tilemaps": "github:microsoft/pxt-tilemaps#v1.12.0"
     },
     "files": [
         "main.blocks",
@@ -15,7 +17,8 @@
         "tilemap.g.jres",
         "tilemap.g.ts",
         "images.g.jres",
-        "images.g.ts"
+        "images.g.ts",
+        "pxt-raycasting.json"
     ],
     "testFiles": [
         "test.ts"
