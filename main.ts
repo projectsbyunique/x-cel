@@ -61,6 +61,27 @@ function makeHallways () {
 statusbars.onZero(StatusBarKind.Health, function (status) {
 	
 })
+function missionMenu () {
+    intro_scene_sprite.destroy()
+    textSprite.destroy()
+    myMenu = miniMenu.createMenu(
+    miniMenu.createMenuItem("Mission 1"),
+    miniMenu.createMenuItem("Mission 2"),
+    miniMenu.createMenuItem("Mission 3"),
+    miniMenu.createMenuItem("Mission 4")
+    )
+    myMenu.setDimensions(120, 60)
+    myMenu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 12)
+    myMenu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+    myMenu.setPosition(20, 30)
+    myMenu.setFlag(SpriteFlag.RelativeToCamera, true)
+    myMenu.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        if (selectedIndex == 0) {
+            myMenu.close()
+            mission1setup()
+        }
+    })
+}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.e_bullet_spawn, function (sprite, otherSprite) {
     if (sprites.readDataNumber(otherSprite, "health") > 0) {
         music.zapped.play()
@@ -68,6 +89,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.e_bullet_spawn, function (sp
         pause(100)
         otherSprite.setImage(assets.image`myImage9`)
         sprites.changeDataNumberBy(otherSprite, "health", -1)
+        sprite.destroy()
     } else {
         sprite.destroy()
         otherSprite.destroy()
@@ -81,13 +103,37 @@ scene.onHitWall(SpriteKind.EnemyProjectile, function (sprite, location) {
     music.bigCrash.play()
     sprite.destroy()
 })
+function mission1setup () {
+    mySprite = Render.getRenderSpriteInstance()
+    scaling.scaleToPercent(Render.getRenderSpriteInstance(), 100, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+    tiles.setCurrentTilemap(tilemap`level`)
+    scene.setBackgroundImage(assets.image`cityscape`)
+    Render.setAttribute(Render.attribute.wallZScale, 2)
+    Render.setViewAngleInDegree(-90)
+    tiles.placeOnTile(mySprite, tiles.getTileLocation(8, 48))
+    mySprite.x += -8
+    jet = sprites.create(assets.image`myImage`, SpriteKind.Jet)
+    jet.setFlag(SpriteFlag.RelativeToCamera, true)
+    Render.moveWithController(0, 0)
+    statusbar = statusbars.create(20, 4, StatusBarKind.Health)
+    statusbar.setColor(2, 0)
+    statusbar.setBarBorder(1, 15)
+    statusbar.positionDirection(CollisionDirection.Bottom)
+    makeHallways()
+    makeFakeBuilding()
+}
 let mySprite2: Sprite = null
 let projectile: Sprite = null
+let jet: Sprite = null
+let mySprite: Sprite = null
+let myMenu: miniMenu.MenuSprite = null
 let ENEMY_BULLET_SPAWNER: Sprite = null
 let hallway: Sprite = null
 let statusbar: StatusBarSprite = null
+let textSprite: TextSprite = null
+let intro_scene_sprite: Sprite = null
 let float = 7
-let intro_scene_sprite = sprites.create(img`
+intro_scene_sprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -5122,32 +5168,17 @@ intro_scene_sprite.setImage(img`
     `)
 color.startFade(color.White, color.originalPalette, 500)
 color.pauseUntilFadeDone()
-let textSprite = textsprite.create("PRESS ANY", 0, 7)
+textSprite = textsprite.create("PRESS ANY", 0, 7)
 textSprite.setFlag(SpriteFlag.RelativeToCamera, true)
 textSprite.setPosition(80, 90)
 textSprite.setOutline(1, 15)
 while (true) {
     if (controller.anyButton.isPressed()) {
+        missionMenu()
         break;
     }
     pause(0)
 }
-let mySprite = Render.getRenderSpriteInstance()
-intro_scene_sprite.destroy()
-textSprite.destroy()
-scaling.scaleToPercent(Render.getRenderSpriteInstance(), 100, ScaleDirection.Uniformly, ScaleAnchor.Middle)
-tiles.setCurrentTilemap(tilemap`level`)
-scene.setBackgroundImage(assets.image`cityscape`)
-Render.setAttribute(Render.attribute.wallZScale, 2)
-Render.setViewAngleInDegree(-90)
-tiles.placeOnTile(mySprite, tiles.getTileLocation(8, 48))
-mySprite.x += -8
-let jet = sprites.create(assets.image`myImage`, SpriteKind.Jet)
-jet.setFlag(SpriteFlag.RelativeToCamera, true)
-Render.moveWithController(0, 0)
-statusbar = statusbars.create(20, 4, StatusBarKind.Health)
-makeHallways()
-makeFakeBuilding()
 forever(function () {
     if (controller.A.isPressed()) {
         timer.throttle("action", 200, function () {
@@ -5159,9 +5190,41 @@ forever(function () {
     }
 })
 forever(function () {
+    if (jet) {
+        if (controller.left.isPressed()) {
+            jet.setImage(assets.image`myImage2`)
+            mySprite.ax = -50
+        } else if (controller.right.isPressed()) {
+            jet.setImage(assets.image`myImage3`)
+            mySprite.ax = 50
+        } else {
+            jet.setImage(assets.image`myImage`)
+            mySprite.vx = mySprite.vx * 0.8
+        }
+        if (controller.up.isPressed()) {
+            if (float < 23) {
+                jet.setImage(assets.image`myImage1`)
+                float += 1
+            } else {
+                jet.setImage(assets.image`myImage`)
+            }
+        } else if (controller.down.isPressed()) {
+            if (float > -3) {
+                jet.setImage(assets.image`myImage0`)
+                float += -1
+            } else {
+                jet.setImage(assets.image`myImage`)
+            }
+        }
+        Render.setZOffset(mySprite, float)
+        Render.getRenderSpriteInstance().vy = -60
+        info.setScore(float)
+    }
+})
+forever(function () {
     if (!(sprites.allOfKind(SpriteKind.e_bullet_spawn).length == 0)) {
         for (let value7 of sprites.allOfKind(SpriteKind.e_bullet_spawn)) {
-            if (!(mySprite.x / 0 + mySprite.y / 0 < 0)) {
+            if (Math.sqrt((mySprite.x - value7.x) ** 2 + (mySprite.y - value7.y) ** 2) < 90) {
                 mySprite2 = sprites.create(img`
                     . . 2 2 . . 
                     . 3 1 1 3 . 
@@ -5172,39 +5235,9 @@ forever(function () {
                     `, SpriteKind.EnemyProjectile)
                 Render.setZOffset(mySprite2, 10)
                 mySprite2.setPosition(value7.x, value7.y)
-                mySprite2.follow(Render.getRenderSpriteInstance(), 125)
-                pause(200)
+                mySprite2.follow(Render.getRenderSpriteInstance(), 200)
+                pause(100)
             }
         }
     }
-})
-forever(function () {
-    if (controller.left.isPressed()) {
-        jet.setImage(assets.image`myImage2`)
-        mySprite.ax = -50
-    } else if (controller.right.isPressed()) {
-        jet.setImage(assets.image`myImage3`)
-        mySprite.ax = 50
-    } else {
-        jet.setImage(assets.image`myImage`)
-        mySprite.vx = mySprite.vx * 0.8
-    }
-    if (controller.up.isPressed()) {
-        if (float < 23) {
-            jet.setImage(assets.image`myImage1`)
-            float += 1
-        } else {
-            jet.setImage(assets.image`myImage`)
-        }
-    } else if (controller.down.isPressed()) {
-        if (float > -3) {
-            jet.setImage(assets.image`myImage0`)
-            float += -1
-        } else {
-            jet.setImage(assets.image`myImage`)
-        }
-    }
-    Render.setZOffset(mySprite, float)
-    Render.getRenderSpriteInstance().vy = -60
-    info.setScore(float)
 })
