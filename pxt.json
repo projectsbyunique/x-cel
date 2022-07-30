@@ -12,7 +12,9 @@
         "arcade-background-scroll": "github:microsoft/arcade-background-scroll#6cfbf925b9a4d5ddf3e1078e6cf6ca6a1aebb301",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
         "Color Fading": "github:jwunderl/pxt-color#v0.2.2",
-        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
+        "sound effects": "github:klausw3/pxt-sound-effects#v1.1.0"
     },
     "files": [
         "main.blocks",
