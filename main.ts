@@ -4,15 +4,12 @@ namespace SpriteKind {
     export const e_bullet_spawn = SpriteKind.create()
     export const EnemyProjectile = SpriteKind.create()
     export const Hud = SpriteKind.create()
+    export const Building = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.EnemyProjectile, SpriteKind.Player, function (sprite, otherSprite) {
     if (Render.isSpritesOverlapZ(sprite, otherSprite)) {
-        if (sprite.y > otherSprite.y) {
-            statusbar.value += -5
-            sprite.destroy()
-        } else {
-            sprite.destroy()
-        }
+        statusbar.value += -5
+        sprite.destroy()
     }
     sprite.destroy()
 })
@@ -46,6 +43,18 @@ function makeFakeBuilding () {
         Render.setZOffset(ENEMY_BULLET_SPAWNER, -1)
     }
     tiles.replaceAllTiles(assets.tile`myTile13`, assets.tile`transparency16`)
+    for (let value4 of tiles.getTilesByType(assets.tile`myTile17`)) {
+        skyscraper = sprites.create(assets.image`myImage14`, SpriteKind.Building)
+        tiles.placeOnTile(skyscraper, tiles.getTileLocation(value4.column, value4.row))
+    }
+    tiles.replaceAllTiles(assets.tile`myTile17`, assets.tile`transparency16`)
+}
+function movement (bool: boolean) {
+    if (bool) {
+        Render.getRenderSpriteInstance().vy = -60
+    } else {
+        Render.getRenderSpriteInstance().vy = 0
+    }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EnemyProjectile, function (sprite, otherSprite) {
     sprite.destroy()
@@ -6264,20 +6273,32 @@ function mission1setup () {
     jet = sprites.create(assets.image`myImage`, SpriteKind.Jet)
     jet.setFlag(SpriteFlag.RelativeToCamera, true)
     Render.moveWithController(0, 0)
-    statusbar = statusbars.create(20, 4, StatusBarKind.Health)
-    statusbar.setColor(2, 0)
+    statusbar = statusbars.create(40, 4, StatusBarKind.Health)
+    statusbar.setColor(2, 1)
     statusbar.setBarBorder(1, 15)
-    statusbar.positionDirection(CollisionDirection.Bottom)
+    statusbar.setPosition(23, 115)
+    score = textsprite.create("")
+    score.setPosition(80, 6)
+    movement(true)
     makeHallways()
     makeFakeBuilding()
+    while (true) {
+        if (Render.getRenderSpriteInstance().tilemapLocation().row <= 7) {
+            movement(false)
+            break;
+        }
+        pause(1)
+    }
 }
 let mySprite2: Sprite = null
 let projectile: Sprite = null
+let score: TextSprite = null
 let jet: Sprite = null
 let mySprite: Sprite = null
 let intro_scene_sprite: Sprite = null
 let mission1intro: Image[] = []
 let myMenu: miniMenu.MenuSprite = null
+let skyscraper: Sprite = null
 let ENEMY_BULLET_SPAWNER: Sprite = null
 let hallway: Sprite = null
 let statusbar: StatusBarSprite = null
@@ -11369,8 +11390,6 @@ forever(function () {
             }
         }
         Render.setZOffset(mySprite, float)
-        Render.getRenderSpriteInstance().vy = -60
-        info.setScore(float)
     }
 })
 forever(function () {
