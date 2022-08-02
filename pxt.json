@@ -1,5 +1,5 @@
 {
-    "name": "X-CEL - Copy",
+    "name": "X-CEL 1",
     "version": "0.0.1",
     "description": "",
     "dependencies": {
@@ -38,5 +38,5 @@
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
