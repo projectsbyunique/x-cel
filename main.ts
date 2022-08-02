@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const EnemyProjectile = SpriteKind.create()
     export const Hud = SpriteKind.create()
     export const Building = SpriteKind.create()
+    export const health_pickup = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.EnemyProjectile, SpriteKind.Player, function (sprite, otherSprite) {
     if (Render.isSpritesOverlapZ(sprite, otherSprite)) {
@@ -48,6 +49,11 @@ function makeFakeBuilding () {
         tiles.placeOnTile(skyscraper, tiles.getTileLocation(value4.column, value4.row))
     }
     tiles.replaceAllTiles(assets.tile`myTile17`, assets.tile`transparency16`)
+    for (let value4 of tiles.getTilesByType(assets.tile`myTile18`)) {
+        healthPickup = sprites.create(assets.image`myImage15`, SpriteKind.health_pickup)
+        tiles.placeOnTile(healthPickup, tiles.getTileLocation(value4.column, value4.row))
+    }
+    tiles.replaceAllTiles(assets.tile`myTile18`, assets.tile`transparency16`)
 }
 function movement (bool: boolean) {
     if (bool) {
@@ -85,6 +91,10 @@ function makeHallways () {
 }
 statusbars.onZero(StatusBarKind.Health, function (status) {
 	
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.health_pickup, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    statusbar.value = 100
 })
 function missionMenu () {
     intro_scene_sprite2.destroy()
@@ -6282,13 +6292,6 @@ function mission1setup () {
     movement(true)
     makeHallways()
     makeFakeBuilding()
-    while (true) {
-        if (Render.getRenderSpriteInstance().tilemapLocation().row <= 7) {
-            movement(false)
-            break;
-        }
-        pause(1)
-    }
 }
 let mySprite2: Sprite = null
 let projectile: Sprite = null
@@ -6298,6 +6301,7 @@ let mySprite: Sprite = null
 let intro_scene_sprite: Sprite = null
 let mission1intro: Image[] = []
 let myMenu: miniMenu.MenuSprite = null
+let healthPickup: Sprite = null
 let skyscraper: Sprite = null
 let ENEMY_BULLET_SPAWNER: Sprite = null
 let hallway: Sprite = null
@@ -11220,22 +11224,22 @@ soundeffect.play()
 intro_scene_sprite2.setImage(img`
     fffffffffffffffffffffffffffffffffffcfcffffececfffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffcffffffffffffffffffffffffffffffffffff
     fffffffffffccfffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffffffcfffffffffffffffffffffffffffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffffccccfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffcfbcbfffcfffffffcfffffffcfffffffffffffffffffffffffffffffcfcfcfffffffffffffffffffcfffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffcffffffffffff
-    fffffffffbbdcfffffffffffffffffffffffffffffffffffffffffffffffffffffccceffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffcfffffffffffff
-    fffffffffbcbfcfcfffcffffffffffffffffffffff1ffffffffcfffffffffffffcfcecfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfcffffffffffff
-    ffffffffffcffffffffffffffffffffffffffffffffffffffffecffffffffffffffecfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffcfcfffffffff8fffffffffffffffffcffff1ffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffffffccfcffffffffffffffffffffffffffffffffffffffffffffffffff
-    ffffffffffffffffffffffffffffffffffffffffff1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcecfffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfcccccffffffffffffffffffffffffffffffffffffffffffffffffffff
-    ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fffffffffffffffcffffffffffffffffffffffffff1ffffffffffffffffffffffffffffffffffffffffcfffffffffffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    ffffffffffffffffffffffffffffffffffffffffff1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fcfffffffffffffffccfffffffffffffffffffffff1ffffffffffffffffffffffffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    ffffffffffffffffffcecfffffffffffffffffffff1ffffffffffffffffffffffffffffffccfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    fcffffffffffffffffeceffffffffffcffffffffff1ffffffffffffffffffffffffffffffceffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffcffffffffffff
-    ffffffffffffffffffffcfffffffffffffffffffff1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    fffffffffffcfffffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff44fffffffff
+    fffffffffccccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff444444fffffff
+    fffffffcfbcbfffcfffffffcfffffffcfffffffffffffffffffffffffffffffcfcfcfffffffffffffffffffcfffcfffffffffffffffffffffffffffffffffffffffffffffffffffff4444e54444fffff
+    fffffffffbbdcfffffffffffffffffffffffffffffffffffffffffffffffffffffccceffffffffffffffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffff44444ee5544444fff
+    fffffffffbcbfcfcfffcffffffffffffffffffffff1ffffffffcfffffffffffffcfcecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5554444e54444eeeff
+    ffffffffffcffffffffffffffffffffffffffffffffffffffffecffffffffffffffecfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff55555444444eeeeeff
+    fffffffcfcfffffffff8fffffffffffffffffcffff1ffffffffcffffffffffffffffffffffffffffffffffffffffffffffffffffffccfcffffffffffffffffffffffffffffffff555555544eeeeeeeff
+    ffffffffffffffffffffffffffffffffffffffffff1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcecfffffffffffffffffffffffffffffffffff55e55555eeeee5eeff
+    fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfcccccffffffffffffffffffffffffffffffffff55ee5555eeee55eeff
+    ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffff55ee4555eee455eeff
+    fffffffffffffffcffffffffffffffffffffffffff1ffffffffffffffffffffffffffffffffffffffffcfffffffffffffffffcffffffffffffffffffffffffffffffffffffffff55544555eee44eeeff
+    ffffffffffffffffffffffffffffffffffffffffff1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff55554555eee4eeeeff
+    fcfffffffffffffffccfffffffffffffffffffffff1ffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5555555eeeeeeefff
+    ffffffffffffffffffcecfffffffffffffffffffff1ffffffffffffffffffffffffffffffccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff55555eeeeefffff
+    fcffffffffffffffffeceffffffffffcffffffffff1ffffffffffffffffffffffffffffffceffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffff555eeefffffff
+    ffffffffffffffffffffcfffffffffffffffffffff1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5efffffffff
     ffffffffffffffffffff1ff11ff11111111111111111111111111111111111111111111111111111111111111111ff11f1fffffffffffffffffffffffffffffffffffffffffffffffcfcffffffffffff
     fffffffffffffffffffffffffffffffffffffffff11fffffffffffffffffffffffffffffffffffffffffffcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     fffffffffffffffffffffffcfffffcfcfffffffff11ffffffffffffffffffffffffffffffffffffffffffcecfffffffffffffffffffffffffffffffffffcffffffffffffffffffffffffffffffffffff
@@ -11390,6 +11394,7 @@ forever(function () {
             }
         }
         Render.setZOffset(mySprite, float)
+        mySprite.vy = -60
     }
 })
 forever(function () {
